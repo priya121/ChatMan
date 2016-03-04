@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Client implements Out {
 
@@ -15,7 +12,7 @@ public class Client implements Out {
     public void writeDataOut(ConnectionSocket socket, OutputStreamCreator outputStreamCreator) throws IOException {
         BufferedReader userInput = writeInputToBufferedReader();
         writeToServer(userInput, socket, outputStreamCreator);
-        socket.close();
+        //socket.close();
     }
 
     private void writeToServer(BufferedReader userInput, ConnectionSocket connectionSocket, OutputStreamCreator outputStreamCreator) throws IOException {
