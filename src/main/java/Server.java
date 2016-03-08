@@ -6,22 +6,27 @@ import java.net.Socket;
 
 public class Server implements In {
     private final IOConsole io;
-    private int port;
 
-    public Server(int port, IOConsole io) {
-        this.port = port;
+    public Server(IOConsole io) {
         this.io = io;
     }
 
-    public void readDataIn() throws IOException {
-        String clientMessage;
-        ServerSocket serverSocket = new ServerSocket(port);
-
+    public void readDataIn(ServerSocket serverSocket) throws IOException {
         while (true) {
-            Socket clientSocket = serverSocket.accept();
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            clientMessage = inFromClient.readLine();
-            io.showOutput(clientMessage + "\n");
+            Socket socket = serverSocket.accept();
+            ClientSocket clientSocket = new ClientSocket(socket);
+            echo(clientSocket);
         }
+    }
+
+    public String echo(ConnectionSocket clientSocket) throws IOException {
+        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        String clientMessage = inFromClient.readLine();
+        io.showOutput(clientMessage + "\n");
+        return clientMessage;
+    }
+
+    @Override
+    public void close() throws Exception {
     }
 }

@@ -1,7 +1,8 @@
+import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface ConnectionSocket {
-
+public interface ConnectionSocket extends AutoCloseable {
+    BytesToStreamWriter createOutputStream(OutputStream outputStream);
     OutputStream getOutputStream();
-    void close();
+    InputStream getInputStream();
 }

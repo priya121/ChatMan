@@ -1,10 +1,10 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class RealOutputStream implements DataOutput {
+public class BytesToDataOutputStream implements BytesToStreamWriter {
     private DataOutputStream dataOutputStream;
 
-    public RealOutputStream(DataOutputStream dataOutputStream) {
+    public BytesToDataOutputStream(DataOutputStream dataOutputStream) {
         this.dataOutputStream = dataOutputStream;
     }
 

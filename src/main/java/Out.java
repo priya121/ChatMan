@@ -1,5 +1,5 @@
 import java.io.IOException;
 
-public interface Out {
-    void writeDataOut(ConnectionSocket socket, OutputStreamCreator outputStreamCreator) throws IOException;
+public interface Out extends AutoCloseable {
+    void writeDataOut(ConnectionSocket socket) throws IOException;
 }

@@ -5,7 +5,7 @@ public class FakeIO implements IOConsole {
     private LinkedList<String> words;
 
     public FakeIO(List<String> words) {
-        this.words = new LinkedList<String>(words);
+        this.words = new LinkedList<>(words);
     }
 
     @Override

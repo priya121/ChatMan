@@ -1,7 +1,7 @@
-public class FakeOutputStream implements DataOutput {
+public class FakeByteStreamWriter implements BytesToStreamWriter {
     private String word = "";
 
-    public FakeOutputStream() {
+    public FakeByteStreamWriter() {
     }
 
     @Override
