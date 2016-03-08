@@ -8,9 +8,7 @@ public class FakeSocketSpy implements ConnectionSocket {
     public OutputStream getOutputStream() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(10);
         try {
-            byteArrayOutputStream.write("Hi how are you?".getBytes());
-            called = true;
-            close();
+            byteArrayOutputStream.write("Hi how are you?\nquit".getBytes());
             return byteArrayOutputStream;
         } catch (IOException e) {
             e.printStackTrace();
@@ -20,26 +18,22 @@ public class FakeSocketSpy implements ConnectionSocket {
 
     @Override
     public InputStream getInputStream() {
-        InputStream inputStream = new ByteArrayInputStream("Hi how are you?".getBytes());
+        InputStream inputStream = new ByteArrayInputStream("Hi how are you?\nquit".getBytes());
         return inputStream;
     }
 
     @Override
-    public FakeByteStreamWriter createOutputStream(OutputStream outputStream) {
+    public FakeByteStreamWriter createOutputStream() {
+        called = true;
         return new FakeByteStreamWriter();
-    }
-
-    @Override
-    public void close() {
-        closed = true;
     }
 
     public boolean hasGotOutputStream() {
         return called;
     }
 
-    public boolean hasClosed() {
-        return closed;
+    @Override
+    public void close() throws Exception {
+       closed = true;
     }
-
 }

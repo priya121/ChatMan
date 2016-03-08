@@ -3,7 +3,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Client implements Out {
+public class Client implements EchoClient {
 
     private final IOConsole io;
 
@@ -12,19 +12,29 @@ public class Client implements Out {
     }
 
     @Override
-    public void writeDataOut(ConnectionSocket socket) throws IOException {
-        BufferedReader userInput = writeInputToBufferedReader();
-        writeToServer(userInput, socket);
+    public void writeDataToClient(ConnectionSocket socket) throws IOException {
+        String userInput = io.getInput();
+        while (!userInput.equals("quit")) {
+            BufferedReader bufferedReader = writeInputToBufferedReader(userInput);
+            writeToServer(bufferedReader, socket);
+            readInFromServer(socket);
+            userInput = io.getInput();
+        }
+    }
+
+    private void readInFromServer(ConnectionSocket socket) throws IOException {
+        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        io.showOutput(inFromClient.readLine());
     }
 
     private void writeToServer(BufferedReader userInput, ConnectionSocket connectionSocket) throws IOException {
         String word = userInput.readLine();
-        BytesToStreamWriter outToServer = connectionSocket.createOutputStream(connectionSocket.getOutputStream());
+        BytesToStreamWriter outToServer = connectionSocket.createOutputStream();
         outToServer.writeBytes(word + '\n');
     }
 
-    private BufferedReader writeInputToBufferedReader() {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(io.getInput().getBytes());
+    private BufferedReader writeInputToBufferedReader(String userInput) {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
         return new BufferedReader(new InputStreamReader(inputStream));
     }
 

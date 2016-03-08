@@ -32,8 +32,8 @@ public class ClientSocket implements ConnectionSocket {
     }
 
     @Override
-    public BytesToStreamWriter createOutputStream(OutputStream outputStream) {
-        return new BytesToDataOutputStream(new DataOutputStream(outputStream));
+    public BytesToStreamWriter createOutputStream() {
+        return new BytesToDataOutputStream(new DataOutputStream(getOutputStream()));
     }
 
     @Override
