@@ -15,8 +15,7 @@ public class Client implements EchoClient {
     public void writeDataToClient(ConnectionSocket socket) throws IOException {
         String userInput = getUserInput();
         while (!userInput.equals("quit")) {
-            BufferedReader bufferedReader = writeInputToBufferedReader(userInput);
-            writeToServer(bufferedReader, socket);
+            writeToServer(userInput, socket);
             readInFromServer(socket);
             userInput = io.getInput();
         }
@@ -32,13 +31,14 @@ public class Client implements EchoClient {
         io.showOutput(inFromClient.readLine());
     }
 
-    private void writeToServer(BufferedReader userInput, ConnectionSocket connectionSocket) throws IOException {
-        String word = userInput.readLine();
+    private void writeToServer(String userInput, ConnectionSocket connectionSocket) throws IOException {
+        BufferedReader bufferedReader = writeToBuffer(userInput);
+        String word = bufferedReader.readLine();
         StreamWriter outToServer = connectionSocket.createOutputStream();
         outToServer.writeBytes(word + '\n');
     }
 
-    private BufferedReader writeInputToBufferedReader(String userInput) {
+    private BufferedReader writeToBuffer(String userInput) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
         return new BufferedReader(new InputStreamReader(inputStream));
     }
