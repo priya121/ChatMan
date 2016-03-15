@@ -37,7 +37,7 @@ public class ClientTest {
 
     @Test
     public void writesDataOut() throws IOException {
-        FakeByteStreamWriter fakeDataOutput = fakeSocket.createOutputStream();
+        FakeStreamWriter fakeDataOutput = fakeSocket.createOutputStream();
         fakeDataOutput.writeBytes("Hi how");
         assertEquals(fakeDataOutput.getWrittenBytes(), "Hi how");
     }

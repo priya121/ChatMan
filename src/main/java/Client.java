@@ -13,13 +13,18 @@ public class Client implements EchoClient {
 
     @Override
     public void writeDataToClient(ConnectionSocket socket) throws IOException {
-        String userInput = io.getInput();
+        String userInput = getUserInput();
         while (!userInput.equals("quit")) {
             BufferedReader bufferedReader = writeInputToBufferedReader(userInput);
             writeToServer(bufferedReader, socket);
             readInFromServer(socket);
             userInput = io.getInput();
         }
+    }
+
+    private String getUserInput() {
+        io.showOutput("Enter a word to echo back (type quit to exit): ");
+        return io.getInput();
     }
 
     private void readInFromServer(ConnectionSocket socket) throws IOException {
@@ -29,17 +34,13 @@ public class Client implements EchoClient {
 
     private void writeToServer(BufferedReader userInput, ConnectionSocket connectionSocket) throws IOException {
         String word = userInput.readLine();
-        BytesToStreamWriter outToServer = connectionSocket.createOutputStream();
+        StreamWriter outToServer = connectionSocket.createOutputStream();
         outToServer.writeBytes(word + '\n');
     }
 
     private BufferedReader writeInputToBufferedReader(String userInput) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
         return new BufferedReader(new InputStreamReader(inputStream));
-    }
-
-    @Override
-    public void close() throws Exception {
     }
 }
 

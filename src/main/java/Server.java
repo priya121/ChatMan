@@ -22,30 +22,32 @@ public class Server implements EchoServer {
     }
 
     @Override
-    public String echo(ConnectionSocket clientSocket) throws IOException {
-        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    public String echo(ConnectionSocket socket) throws IOException {
+        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String clientMessage = inFromClient.readLine();
         while (clientMessage != null) {
-            io.showOutput(clientMessage + "\n");
-            writeBackToClient(writeToBufferedReader(clientMessage), clientSocket);
-            clientMessage = inFromClient.readLine();
+            clientMessage = echoBackMessage(socket, inFromClient, clientMessage);
         }
         return clientMessage;
     }
 
-    private BufferedReader writeToBufferedReader(String echoedWord) {
+    private String echoBackMessage(ConnectionSocket socket, BufferedReader buffer, String clientMessage) throws IOException {
+        io.showOutput(clientMessage + "\n");
+        writeBackToClient(writeToBuffer(clientMessage), socket);
+        clientMessage = buffer.readLine();
+        return clientMessage;
+    }
+
+    private BufferedReader writeToBuffer(String echoedWord) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(echoedWord.getBytes());
         return new BufferedReader(new InputStreamReader(inputStream));
     }
 
-    public String writeBackToClient(BufferedReader userInput, ConnectionSocket connectionSocket) throws IOException {
+    public String writeBackToClient(BufferedReader userInput, ConnectionSocket socket) throws IOException {
         String word = userInput.readLine();
-        BytesToStreamWriter outToServer = connectionSocket.createOutputStream();
+        StreamWriter outToServer = socket.createOutputStream();
         outToServer.writeBytes(word + '\n');
         return word;
     }
 
-    @Override
-    public void close() throws Exception {
-    }
 }

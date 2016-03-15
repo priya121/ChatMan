@@ -1,8 +1,8 @@
 import java.io.*;
 
 public class FakeSocketSpy implements ConnectionSocket {
-    boolean called = false;
-    boolean closed = false;
+    public boolean called = false;
+    public boolean closed = false;
 
     @Override
     public OutputStream getOutputStream() {
@@ -23,9 +23,9 @@ public class FakeSocketSpy implements ConnectionSocket {
     }
 
     @Override
-    public FakeByteStreamWriter createOutputStream() {
+    public FakeStreamWriter createOutputStream() {
         called = true;
-        return new FakeByteStreamWriter();
+        return new FakeStreamWriter();
     }
 
     public boolean hasGotOutputStream() {

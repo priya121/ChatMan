@@ -1,19 +1,18 @@
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class App {
 
     public static void main(String[] args) throws IOException {
-        String IPAddress = "localhost";
         int port = 4444;
         IOConsole console = new EchoConsole(System.in, System.out);
         Server server = new Server(console);
         Client client = new Client(console);
+        SocketConnector connect = new SocketConnector(console);
 
         if (args[0].equals("in"))
-            try (ConnectionSocket realSocket = new ClientSocket(new Socket(IPAddress, port))) {
-                client.writeDataToClient(realSocket);
+            try (ConnectionSocket socket = connect.connect()) {
+                client.writeDataToClient(socket);
             } catch (Exception e) {
                 console.showOutput("Invalid client socket");
                 e.printStackTrace();

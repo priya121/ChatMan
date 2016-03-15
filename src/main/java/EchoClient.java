@@ -1,5 +1,5 @@
 import java.io.IOException;
 
-public interface EchoClient extends AutoCloseable {
+public interface EchoClient {
     void writeDataToClient(ConnectionSocket socket) throws IOException;
 }
