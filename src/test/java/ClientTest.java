@@ -15,7 +15,7 @@ public class ClientTest {
     public void socketProducesOutputStream() throws IOException {
         client.writeDataToClient(fakeSocket);
         fakeSocket.createOutputStream();
-        assertTrue(fakeSocket.hasGotOutputStream());
+        assertTrue(fakeSocket.hasOutputStream());
     }
 
     @Test

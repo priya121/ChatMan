@@ -16,7 +16,7 @@ public class ServerTest {
     public void displaysOutWordsSentFromClientSocket() throws IOException {
         EchoConsole console = convertUserInput(new ByteArrayInputStream("n\n".getBytes()));
         Server server = new Server(console);
-        server.echo(fakeSocket);
+        server.echoLoop(fakeSocket);
         assertEquals("Hi how are you?\n\n" +
                 "quit\n\n", recordedOutput.toString());
     }

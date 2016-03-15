@@ -28,12 +28,12 @@ public class FakeSocketSpy implements ConnectionSocket {
         return new FakeStreamWriter();
     }
 
-    public boolean hasGotOutputStream() {
-        return called;
-    }
-
     @Override
     public void close() throws Exception {
        closed = true;
+    }
+
+    public boolean hasOutputStream() {
+        return called;
     }
 }

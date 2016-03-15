@@ -3,8 +3,8 @@ import java.net.Socket;
 
 public class SocketConnector {
     private final IOConsole io;
-    String IPAddress = "localhost";
-    int port = 4444;
+    String IPAddress;
+    int port;
 
     public SocketConnector(IOConsole io) {
         this.io = io;

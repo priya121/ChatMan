@@ -14,15 +14,13 @@ public class Server implements EchoServer {
 
     @Override
     public void readDataFromClient(ServerSocket serverSocket) throws IOException {
-        while (true) {
-            Socket socket = serverSocket.accept();
-            ClientSocket clientSocket = new ClientSocket(socket);
-            echo(clientSocket);
-        }
+        Socket socket = serverSocket.accept();
+        ClientSocket clientSocket = new ClientSocket(socket);
+        echoLoop(clientSocket);
     }
 
     @Override
-    public String echo(ConnectionSocket socket) throws IOException {
+    public String echoLoop(ConnectionSocket socket) throws IOException {
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String clientMessage = inFromClient.readLine();
         while (clientMessage != null) {
@@ -45,8 +43,8 @@ public class Server implements EchoServer {
 
     public String writeBackToClient(BufferedReader userInput, ConnectionSocket socket) throws IOException {
         String word = userInput.readLine();
-        StreamWriter outToServer = socket.createOutputStream();
-        outToServer.writeBytes(word + '\n');
+        StreamWriter out = socket.createOutputStream();
+        out.writeBytes(word + '\n');
         return word;
     }
 
