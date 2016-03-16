@@ -17,8 +17,8 @@ public class ClientSocket implements ConnectionSocket {
             return socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
         }
+        return null;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class ClientSocket implements ConnectionSocket {
             return socket.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
         }
+        return null;
     }
 
     @Override

@@ -6,7 +6,6 @@ public class App {
     public static void main(String[] args) throws IOException {
         int port = 4444;
         IOConsole console = new EchoConsole(System.in, System.out);
-        Server server = new Server(console);
         Client client = new Client(console);
         SocketConnector connect = new SocketConnector(console);
 
@@ -17,13 +16,11 @@ public class App {
                 console.showOutput("Invalid client socket");
                 e.printStackTrace();
             }
+
         else if (args[0].equals("out")) {
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-                server.readDataFromClient(serverSocket);
-            } catch (Exception e) {
-                console.showOutput("Invalid server socket");
-                e.printStackTrace();
-            }
+            ServerSocket serverSocket = new ServerSocket(port);
+            Server server = new Server(console, serverSocket);
+            server.read();
         }
     }
 }

@@ -1,7 +1,6 @@
 import java.io.IOException;
-import java.net.ServerSocket;
 
-public interface EchoServer {
-    void readDataFromClient(ServerSocket serverSocket) throws IOException;
-    String echoLoop(ConnectionSocket connectionSocket) throws IOException;
+public interface EchoServer extends Runnable {
+    void readDataFromClient() throws IOException;
+    String echoLoop() throws IOException;
 }
