@@ -1,5 +1,5 @@
 import java.io.IOException;
 
 public interface EchoClient {
-    void writeDataToClient(ConnectionSocket socket) throws IOException;
+    void writeDataToServer(ConnectionSocket socket) throws IOException;
 }

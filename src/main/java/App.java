@@ -11,16 +11,17 @@ public class App {
 
         if (args[0].equals("in"))
             try (ConnectionSocket socket = connect.connect()) {
-                client.writeDataToClient(socket);
+                client.writeDataToServer(socket);
             } catch (Exception e) {
                 console.showOutput("Invalid client socket");
                 e.printStackTrace();
             }
 
         else if (args[0].equals("out")) {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Server server = new Server(console, serverSocket);
-            server.read();
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                Server server = new Server(console, serverSocket);
+                server.read();
+            }
         }
     }
 }

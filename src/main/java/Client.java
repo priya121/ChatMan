@@ -12,9 +12,9 @@ public class Client implements EchoClient {
     }
 
     @Override
-    public void writeDataToClient(ConnectionSocket socket) throws IOException {
+    public void writeDataToServer(ConnectionSocket socket) throws IOException {
         String userInput = getUserInput();
-        while (!userInput.equals("quit")) {
+        while (!userInput.contains("quit")) {
             writeToServer(userInput, socket);
             readInFromServer(socket);
             userInput = io.getInput();
@@ -22,11 +22,11 @@ public class Client implements EchoClient {
     }
 
     private String getUserInput() {
-        io.showOutput("Enter a word to echo back (type quit to exit): ");
+        io.showOutput("Enter text to send: ");
         return io.getInput();
     }
 
-    private void readInFromServer(ConnectionSocket socket) throws IOException {
+    public void readInFromServer(ConnectionSocket socket) throws IOException {
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         io.showOutput(inFromClient.readLine());
     }
@@ -34,8 +34,8 @@ public class Client implements EchoClient {
     private void writeToServer(String userInput, ConnectionSocket connectionSocket) throws IOException {
         BufferedReader bufferedReader = writeToBuffer(userInput);
         String word = bufferedReader.readLine();
-        StreamWriter outToServer = connectionSocket.createOutputStream();
-        outToServer.writeBytes(word + '\n');
+        StreamWriter outToServer = connectionSocket.getOutputStream();
+        outToServer.writeBytes(word + " " + '\n');
     }
 
     private BufferedReader writeToBuffer(String userInput) {
@@ -43,6 +43,3 @@ public class Client implements EchoClient {
         return new BufferedReader(new InputStreamReader(inputStream));
     }
 }
-
-
-

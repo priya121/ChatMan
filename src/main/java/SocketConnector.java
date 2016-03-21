@@ -17,7 +17,7 @@ public class SocketConnector {
         port = Integer.parseInt(io.getInput());
     }
 
-    public ConnectionSocket connect() {
+    public ClientSocket connect() {
         userInput();
         try {
             io.showOutput("Connection made");

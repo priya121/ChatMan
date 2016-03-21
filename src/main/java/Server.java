@@ -12,10 +12,8 @@ public class Server {
     }
 
     public void read() throws IOException {
-        while (true) {
-            Socket socket = serverSocket.accept();
-            new Thread(new ThreadServer(new ClientSocket(socket), io), "newThread").start();
-        }
+        Socket socket = serverSocket.accept();
+        new Thread(new ServerReadInThread(new ClientSocket(socket), io), "newThread").start();
     }
 }
 

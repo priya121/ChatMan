@@ -1,36 +1,31 @@
 import java.io.*;
 
 public class FakeSocketSpy implements ConnectionSocket {
+    private final IOConsole fakeIOStream;
     public boolean called = false;
     public boolean closed = false;
 
+    public FakeSocketSpy(IOConsole fakeIOStream) {
+        this.fakeIOStream = fakeIOStream;
+    }
+
     @Override
-    public OutputStream getOutputStream() {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(10);
-        try {
-            byteArrayOutputStream.write("Hi how are you?\nquit".getBytes());
-            return byteArrayOutputStream;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+    public FakeStreamWriter getOutputStream() {
+        called = true;
+        FakeStreamWriter fakeWriter = new FakeStreamWriter();
+        fakeWriter.writeBytes(fakeIOStream.getInput());
+        return fakeWriter;
     }
 
     @Override
     public InputStream getInputStream() {
-        InputStream inputStream = new ByteArrayInputStream("Hi how are you?\nquit".getBytes());
+        InputStream inputStream = new ByteArrayInputStream(fakeIOStream.getInput().getBytes());
         return inputStream;
     }
 
     @Override
-    public FakeStreamWriter createOutputStream() {
-        called = true;
-        return new FakeStreamWriter();
-    }
-
-    @Override
     public void close() throws Exception {
-       closed = true;
+        closed = true;
     }
 
     public boolean hasOutputStream() {
