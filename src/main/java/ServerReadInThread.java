@@ -67,7 +67,7 @@ public class ServerReadInThread implements EchoServer {
     private void writeMessagesToStream(ByteArrayOutputStream outputStream) {
         for (String word : messageHistory) {
             try {
-                outputStream.write(word.getBytes());
+                outputStream.write((word + "\n").getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }

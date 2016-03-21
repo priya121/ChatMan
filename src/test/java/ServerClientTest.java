@@ -15,7 +15,7 @@ public class ServerClientTest {
     public void testsAllMessagesSentToClient() throws IOException {
         ConnectionSocket clientSocket = connectClientToServer(4444);
         client.writeDataToServer(clientSocket);
-        assertTrue(recordedOutput.toString().contains("how are you? I'm great thanks That's good"));
+        assertTrue(recordedOutput.toString().contains("how are you?\nI'm great thanks\nThat's good\n"));
     }
 
     private ConnectionSocket connectClientToServer(int port) throws IOException {
