@@ -35,7 +35,7 @@ public class Client implements EchoClient {
         BufferedReader bufferedReader = writeToBuffer(userInput);
         String word = bufferedReader.readLine();
         StreamWriter outToServer = connectionSocket.getOutputStream();
-        outToServer.writeBytes(word + '\n');
+        outToServer.writeBytes(word + " " + "\n");
     }
 
     private BufferedReader writeToBuffer(String userInput) {
