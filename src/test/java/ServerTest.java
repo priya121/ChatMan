@@ -14,18 +14,23 @@ public class ServerTest {
     @Test
     public void displaysOutWordsSentFromClientSocket() throws IOException {
         EchoConsole console = convertUserInput(new ByteArrayInputStream("Hi\nHi how are you?".getBytes()));
-        ServerReadInThread server = new ServerReadInThread(fakeSocket, console);
+        ChatServer server = new ChatServer(fakeSocket, console);
         server.sendMessagesToClient();
         assertEquals("Hi\n", recordedOutput.toString());
     }
 
     @Test
     public void storesMessageHistory() throws IOException {
-        ServerReadInThread server = new ServerReadInThread(fakeSocket, fakeInput);
+        ChatServer server = new ChatServer(fakeSocket, fakeInput);
         server.sendMessagesToClient();
         server.sendMessagesToClient();
-        assertEquals("Hi", ServerReadInThread.messageHistory.get(0));
-        assertEquals("Are", ServerReadInThread.messageHistory.get(1));
+        assertEquals("Hi", ChatServer.messageHistory.get(0));
+        assertEquals("Are", ChatServer.messageHistory.get(1));
+    }
+
+    @Test
+    public void receivesAGroupOfThreeMessagesFromClient() {
+
     }
 
     public EchoConsole convertUserInput(InputStream userInput) {

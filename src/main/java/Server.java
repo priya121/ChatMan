@@ -13,7 +13,7 @@ public class Server {
 
     public void read() throws IOException {
         Socket socket = serverSocket.accept();
-        new Thread(new ServerReadInThread(new ClientSocket(socket), io), "newThread").start();
+        new Thread(new ChatServer(new ClientSocket(socket), io), "newThread").start();
     }
 }
 

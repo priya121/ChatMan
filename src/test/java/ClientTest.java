@@ -46,6 +46,11 @@ public class ClientTest {
         assertEquals("how are you?\n", recordedOutput.toString());
     }
 
+    @Test
+    public void sendsAGroupOfThreeMessagesToTheServer() {
+
+    }
+
     public EchoConsole convertUserInput(InputStream userInput) {
         return new EchoConsole(userInput, output);
     }

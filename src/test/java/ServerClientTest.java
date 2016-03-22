@@ -16,18 +16,18 @@ public class ServerClientTest {
         ConnectionSocket clientSocket = connectClientToServer(4444);
         client.writeDataToServer(clientSocket);
         assertEquals("Please type in localhost make a connection\n" +
-                     "Please enter 4444 to make a connection\n" +
-                     "Connection made\n" +
-                     "Enter text to send: \n" +
-                     "how are you? \n" +
-                     "how are you? \n" +
-                     "how are you? \n" +
-                     "I'm great thanks \n" +
-                     "how are you? I'm great thanks \n" +
-                     "how are you? \n" +
-                     "I'm great thanks \n" +
-                     "That's good \n" +
-                     "how are you? I'm great thanks That's good \n", recordedOutput.toString());
+                "Please enter 4444 to make a connection\n" +
+                "Connection made\n" +
+                "Enter text to send: \n" +
+                "how are you? \n" +
+                "how are you? \n" +
+                "how are you? \n" +
+                "I'm great thanks \n" +
+                "how are you? I'm great thanks \n" +
+                "how are you? \n" +
+                "I'm great thanks \n" +
+                "That's good \n" +
+                "how are you? I'm great thanks That's good \n", recordedOutput.toString());
     }
 
     private ConnectionSocket connectClientToServer(int port) throws IOException {

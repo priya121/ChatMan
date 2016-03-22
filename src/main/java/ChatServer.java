@@ -2,13 +2,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerReadInThread implements EchoServer {
+public class ChatServer implements EchoServer {
 
     private final IOConsole io;
     private final ConnectionSocket socket;
     public static List<String> messageHistory;
 
-    public ServerReadInThread(ConnectionSocket socket, IOConsole io) {
+    public ChatServer(ConnectionSocket socket, IOConsole io) {
         this.socket = socket;
         this.io = io;
         messageHistory = new ArrayList<>();
