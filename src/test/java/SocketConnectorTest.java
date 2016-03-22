@@ -22,11 +22,11 @@ public class SocketConnectorTest {
     @Ignore
     @Test
     public void makesAConnectionToASocketWithUserInput() throws IOException {
-        IOConsole fakeInput = new FakeIO(Arrays.asList("localhost", "4444", "4444"));
-        ConnectionSocket connector = new SocketConnector(fakeInput).connect();
+        IOConsole fakeInput = new FakeIO(Arrays.asList("localhost", "4444", "quit"));
         ServerSocket serverSocket = new ServerSocket(4444);
         Server server = new Server(fakeInput, serverSocket);
         server.read();
+        ConnectionSocket connector = new SocketConnector(fakeInput).connect();
         assertTrue(connector instanceof ConnectionSocket);
     }
 }

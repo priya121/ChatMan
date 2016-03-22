@@ -29,7 +29,8 @@ public class ServerReadInThread implements EchoServer {
         while (clientMessage != null) {
             messageHistory.add(clientMessage);
             showAllMessages(messageHistory);
-            clientMessage = echoBackMessage(socket, buffer);
+            echoBackMessage(socket, buffer);
+            clientMessage = buffer.readLine();
         }
     }
 
@@ -39,9 +40,8 @@ public class ServerReadInThread implements EchoServer {
         return new BufferedReader(inputReader);
     }
 
-    private String echoBackMessage(ConnectionSocket socket, BufferedReader buffer) throws IOException {
+    private void echoBackMessage(ConnectionSocket socket, BufferedReader buffer) throws IOException {
         writeBackToClient(writeMessagesToBuffer(), socket);
-        return buffer.readLine();
     }
 
     public void writeBackToClient(BufferedReader bufferedReader, ConnectionSocket socket) throws IOException {
