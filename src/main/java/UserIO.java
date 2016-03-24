@@ -1,14 +1,15 @@
 import java.io.*;
 
-public class EchoConsole implements IOConsole {
+public class UserIO implements IOConsole {
     private final BufferedReader input;
     private final PrintStream output;
 
-    public EchoConsole(InputStream input, PrintStream output) {
+    public UserIO(InputStream input, PrintStream output) {
         this.input = new BufferedReader(new InputStreamReader(input));
         this.output = output;
     }
 
+    @Override
     public String getInput() {
         try {
             return input.readLine();

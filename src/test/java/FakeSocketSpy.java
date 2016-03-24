@@ -27,8 +27,4 @@ public class FakeSocketSpy implements ConnectionSocket {
     public void close() throws Exception {
         closed = true;
     }
-
-    public boolean hasOutputStream() {
-        return called;
-    }
 }

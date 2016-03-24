@@ -20,7 +20,6 @@ public class SocketConnector {
     public ClientSocket connect() {
         userInput();
         try {
-            io.showOutput("Connection made");
             return new ClientSocket(new Socket(IPAddress, port));
         } catch (IOException e) {
             e.printStackTrace();

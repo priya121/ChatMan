@@ -1,17 +1,16 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 public class ChatServer implements EchoServer {
 
     private final IOConsole io;
     private final ConnectionSocket socket;
-    public static List<String> messageHistory;
 
     public ChatServer(ConnectionSocket socket, IOConsole io) {
         this.socket = socket;
         this.io = io;
-        messageHistory = new ArrayList<>();
     }
 
     @Override
@@ -24,58 +23,43 @@ public class ChatServer implements EchoServer {
     }
 
     public void sendMessagesToClient() throws IOException {
-        BufferedReader buffer = readInputStreamToBuffer();
-        String clientMessage = buffer.readLine();
+        String clientMessage = readClientMessage();
         while (clientMessage != null) {
-            messageHistory.add(clientMessage);
-            showAllMessages(messageHistory);
-            echoBackMessage(socket, buffer);
-            clientMessage = buffer.readLine();
+            showAllMessages(clientMessage);
+            echoBackMessages(socket, clientMessage);
+            clientMessage = readClientMessage();
         }
     }
 
-    private BufferedReader readInputStreamToBuffer() {
+    private String readClientMessage() {
         InputStream inputFromClient = socket.getInputStream();
-        InputStreamReader inputReader = new InputStreamReader(inputFromClient);
-        return new BufferedReader(inputReader);
-    }
-
-    private void echoBackMessage(ConnectionSocket socket, BufferedReader buffer) throws IOException {
-        writeBackToClient(writeMessagesToBuffer(), socket);
-    }
-
-    public void writeBackToClient(BufferedReader bufferedReader, ConnectionSocket socket) throws IOException {
-        String word;
-        StreamWriter out = socket.getOutputStream();
-        while ((word = bufferedReader.readLine()) != null) {
-            out.writeBytes(word + '\n');
+        try {
+            ObjectInputStream batch = new ObjectInputStream(inputFromClient);
+            String messageFromClient = (String) batch.readObject();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            writeMessagesToStream(outputStream, messageFromClient);
+            return messageFromClient;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    private BufferedReader writeMessagesToBuffer() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        writeMessagesToStream(outputStream);
-        byte[] bytes = outputStream.toByteArray();
-        return createBufferedReader(bytes);
+    private void echoBackMessages(ConnectionSocket socket, String words) throws IOException {
+        StreamWriter outToServer = socket.getOutputStream();
+        outToServer.writeObject(words);
     }
 
-    private BufferedReader createBufferedReader(byte[] bytes) {
-        InputStream inputStream = new ByteArrayInputStream(bytes);
-        return new BufferedReader(new InputStreamReader(inputStream));
-    }
-
-    private void writeMessagesToStream(ByteArrayOutputStream outputStream) {
-        for (String word : messageHistory) {
-            try {
-                outputStream.write(word.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void writeMessagesToStream(ByteArrayOutputStream outputStream, String words) {
+        try {
+            outputStream.write(words.getBytes());
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 
-    public void showAllMessages(List<String> messageHistory) {
-        messageHistory.forEach(io::showOutput);
+    public void showAllMessages(String batchMessage) {
+        io.showOutput(batchMessage);
     }
 
 }

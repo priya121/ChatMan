@@ -1,23 +1,14 @@
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ClientTest {
-    IOConsole fakeInput = new FakeIO(Arrays.asList("hi", "how are you?", "I'm good", "quit"));
-    Client client = new Client(fakeInput);
+    IOConsole fakeInput = new FakeIO(Arrays.asList("hi", "how are you?", "I'm good", "a", "b", "c", "quit"));
     FakeSocketSpy fakeSocket = new FakeSocketSpy(fakeInput);
-    ByteArrayOutputStream recordedOutput = new ByteArrayOutputStream();
-    PrintStream output = new PrintStream(recordedOutput);
-
-    @Test
-    public void socketProducesOutputStream() throws IOException {
-        client.writeDataToServer(fakeSocket);
-        assertTrue(fakeSocket.hasOutputStream());
-    }
 
     @Test
     public void connectionSocketIsClosedAfterUsed() {
@@ -37,22 +28,14 @@ public class ClientTest {
         assertEquals("hi", fakeDataOutput.getWrittenBytes());
     }
 
+    @Ignore
     @Test
     public void canReadInContentFromServer() throws IOException {
-        EchoConsole console = convertUserInput(new ByteArrayInputStream("how are you?\n".getBytes()));
-        Client client = new Client(console);
-        ConnectionSocket fakeConnectionSocket = new FakeSocketSpy(console);
-        client.readInFromServer(fakeConnectionSocket);
-        assertEquals("how are you?\n", recordedOutput.toString());
+        IOConsole fakeInput = new FakeIO(Arrays.asList("hi", "how are you?", "quit"));
+        ChatClient client = new ChatClient(fakeInput);
+        ConnectionSocket fakeConnectionSocket = new FakeSocketSpy(fakeInput);
+        assertEquals("hi", "how are you?", client.readInFromServer(fakeConnectionSocket));
     }
 
-    @Test
-    public void sendsAGroupOfThreeMessagesToTheServer() {
-
-    }
-
-    public EchoConsole convertUserInput(InputStream userInput) {
-        return new EchoConsole(userInput, output);
-    }
 }
 

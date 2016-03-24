@@ -1,6 +1,7 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientSocket implements ConnectionSocket {
@@ -13,7 +14,7 @@ public class ClientSocket implements ConnectionSocket {
     @Override
     public OutputStreamWriter getOutputStream() {
         try {
-            return new OutputStreamWriter(new DataOutputStream(socket.getOutputStream()));
+            return new OutputStreamWriter(new DataOutputStream(socket.getOutputStream()), new ObjectOutputStream(socket.getOutputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
