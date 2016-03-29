@@ -14,7 +14,7 @@ public class ServerTest {
         UserIO console = convertUserInput(new ByteArrayInputStream("".getBytes()));
         ConnectionSocket fakeSocket = new FakeSocketSpy(console);
         ChatServer server = new ChatServer(fakeSocket, console);
-        server.showAllMessages("Hi\nHow are you?\nI'm good.\n");
+        //server.showAllMessages("Hi\nHow are you?\nI'm good.\n");
     }
 
     @Ignore

@@ -21,7 +21,7 @@ public class OutputStreamWriter implements StreamWriter {
     }
 
     @Override
-    public void writeObject(String batch) {
+    public void writeObject(MessageList batch) {
         try {
             objectOutputStream.writeObject(batch);
         } catch (IOException e) {

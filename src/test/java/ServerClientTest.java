@@ -16,21 +16,21 @@ public class ServerClientTest {
         ChatClient client = new ChatClient(programConsole);
         ConnectionSocket clientServerConnection = connectClientToServer(4444, console);
         client.startChat(clientServerConnection);
-        assertEquals("Please type in localhost make a connection\n" +
-                     "Please enter 4444 to make a connection\n" +
-                     "Enter text to send: \n" +
-                     "how are you?\n" +
-                     "I'm great thanks\n" +
-                     "That's good\n\n" +
-                     "how are you?\n" +
-                     "I'm great thanks\n" +
-                     "That's good\n\n" +
-                     "ok\n" +
-                     "good\n" +
-                     "quit\n\n" +
-                     "ok\n" +
-                     "good\n" +
-                     "quit\n\n", recordedOutput.toString());
+        assertEquals("Please type in 172.17.139.40 make a connection\n" +
+                "Please enter 4444 to make a connection\n" +
+                "Enter text to send: \n" +
+                "how are you?\n" +
+                "I'm great thanks\n" +
+                "That's good\n" +
+                "how are you?\n" +
+                "I'm great thanks\n" +
+                "That's good\n" +
+                "ok\n" +
+                "good\n" +
+                "quit\n" +
+                "ok\n" +
+                "good\n" +
+                "quit\n", recordedOutput.toString());
     }
 
     private ConnectionSocket connectClientToServer(int port, IOConsole console) throws IOException {

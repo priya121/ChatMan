@@ -5,10 +5,10 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         IOConsole console = new UserIO(System.in, System.out);
-        SocketConnector connect = new SocketConnector(console);
-        ConnectionSocket socket = connect.connect();
 
         if (args[0].equals("in")) {
+            SocketConnector connect = new SocketConnector(console);
+            ConnectionSocket socket = connect.connect();
             ChatClient client = new ChatClient(console);
             client.startChat(socket);
         } else if (args[0].equals("out")) {

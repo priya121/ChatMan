@@ -11,7 +11,7 @@ public class SocketConnector {
     }
 
     public void userInput() {
-        io.showOutput("Please type in localhost make a connection");
+        io.showOutput("Please type in 172.17.139.40 make a connection");
         IPAddress = io.getInput();
         io.showOutput("Please enter 4444 to make a connection");
         port = Integer.parseInt(io.getInput());

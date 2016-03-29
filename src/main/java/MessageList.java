@@ -1,16 +1,23 @@
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageList implements Serializable {
-    int counter = 0;
-    String message = "";
-    String batchMessage = "";
+    List<String> messages = new ArrayList<>();
 
-    public String set(IOConsole io) {
-        while (counter < 3) {
-            message = io.getInput();
-            batchMessage += message + "\n";
-            counter ++;
-        }
-        return batchMessage;
+    public void addMessage(String message) {
+        messages.add(message);
+    }
+
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public boolean isReadyForSend() {
+        return messages.size() == 3;
+    }
+
+    public void writeToStream(StreamWriter outputStream) {
+        outputStream.writeObject(this);
     }
 }

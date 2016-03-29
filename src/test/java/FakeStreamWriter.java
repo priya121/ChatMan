@@ -10,7 +10,7 @@ public class FakeStreamWriter implements StreamWriter {
     }
 
     @Override
-    public void writeObject(String batch) {
+    public void writeObject(MessageList batch) {
         this.word += batch;
     }
 

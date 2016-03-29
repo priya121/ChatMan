@@ -1,16 +1,19 @@
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatServer implements EchoServer {
 
     private final IOConsole io;
     private final ConnectionSocket socket;
+    private final List<String> messageHistory;
 
     public ChatServer(ConnectionSocket socket, IOConsole io) {
         this.socket = socket;
         this.io = io;
+        messageHistory = new ArrayList<>();
     }
 
     @Override
@@ -23,21 +26,21 @@ public class ChatServer implements EchoServer {
     }
 
     public void sendMessagesToClient() throws IOException {
-        String clientMessage = readClientMessage();
-        while (clientMessage != null) {
+        MessageList clientMessage = readClientMessage();
+        while (clientMessage.getMessages() != null) {
             showAllMessages(clientMessage);
-            echoBackMessages(socket, clientMessage);
+            storeAllMessages(clientMessage);
             clientMessage = readClientMessage();
         }
     }
 
-    private String readClientMessage() {
+    private MessageList readClientMessage() {
         InputStream inputFromClient = socket.getInputStream();
         try {
             ObjectInputStream batch = new ObjectInputStream(inputFromClient);
-            String messageFromClient = (String) batch.readObject();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            writeMessagesToStream(outputStream, messageFromClient);
+            MessageList messageFromClient = (MessageList) batch.readObject();
+            StreamWriter outToServer = socket.getOutputStream();
+            writeMessagesToStream(outToServer, messageFromClient);
             return messageFromClient;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -45,21 +48,17 @@ public class ChatServer implements EchoServer {
         }
     }
 
-    private void echoBackMessages(ConnectionSocket socket, String words) throws IOException {
-        StreamWriter outToServer = socket.getOutputStream();
-        outToServer.writeObject(words);
+    private void writeMessagesToStream(StreamWriter outputStream, MessageList words) {
+        words.writeToStream(outputStream);
     }
 
-    private void writeMessagesToStream(ByteArrayOutputStream outputStream, String words) {
-        try {
-            outputStream.write(words.getBytes());
-        } catch (IOException e1) {
-            e1.printStackTrace();
+    public void showAllMessages(MessageList batchMessage) {
+        batchMessage.getMessages().forEach(io::showOutput);
+    }
+
+    public void storeAllMessages(MessageList batchMessage) {
+        for (String message : batchMessage.getMessages()) {
+            messageHistory.add(message);
         }
     }
-
-    public void showAllMessages(String batchMessage) {
-        io.showOutput(batchMessage);
-    }
-
 }

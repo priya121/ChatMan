@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatClient implements Client {
 
@@ -11,7 +13,7 @@ public class ChatClient implements Client {
     @Override
     public void startChat(ConnectionSocket socket) throws IOException {
         io.showOutput("Enter text to send: ");
-        String userMessage = "";
+        List<String> userMessage = new ArrayList<>();
         while (!userMessage.contains("quit")) {
             writeToServer(socket);
             userMessage = readInFromServer(socket);
@@ -24,21 +26,28 @@ public class ChatClient implements Client {
     }
 
     private void writeToServer(ConnectionSocket connectionSocket) throws IOException {
-        String batch = new MessageList().set(io);
-        StreamWriter outToServer = connectionSocket.getOutputStream();
-        outToServer.writeObject(batch);
+        MessageList batch = createMessageList();
+        if (batch.isReadyForSend()) {
+            StreamWriter outToServer = connectionSocket.getOutputStream();
+            batch.writeToStream(outToServer);
+        }
     }
 
-    public String readInFromServer(ConnectionSocket socket) throws IOException {
+    private MessageList createMessageList() {
+        MessageListFactory messageListFactory = new MessageListFactory(io);
+        return messageListFactory.create();
+    }
+
+    public List<String> readInFromServer(ConnectionSocket socket) throws IOException {
         InputStream inputFromClient = socket.getInputStream();
+        ObjectInputStream batch = new ObjectInputStream(inputFromClient);
+        MessageList messageFromClient = null;
         try {
-            ObjectInputStream batch = new ObjectInputStream(inputFromClient);
-            String messageFromClient = (String) batch.readObject();
-            io.showOutput(messageFromClient);
-            return messageFromClient;
-        } catch (IOException | ClassNotFoundException e) {
+            messageFromClient = (MessageList) batch.readObject();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
+        messageFromClient.getMessages().forEach(io::showOutput);
+        return messageFromClient.getMessages();
     }
 }
